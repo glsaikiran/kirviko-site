@@ -25,7 +25,8 @@ SECRET_KEY = 'django-insecure-n&=rd+k_*94=&b+gmu4_(%5&#ix+i8fhc)+sjtj$@hq0_@fz9g
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['kirviko-site.onrender.com', 'localhost', '127.0.0.1'
+]
 
 
 # Application definition
