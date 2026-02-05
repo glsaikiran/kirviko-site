@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Checkout - Kirviko</title>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f8f9fa; margin: 0; padding: 2rem; }
+        .checkout-container { max-width: 800px; margin: 0 auto; background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+        h1 { color: #007bff; text-align: center; margin-bottom: 2rem; }
+        .order-summary { background: #f8f9fa; padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem; }
+        .item-row { display: flex; justify-content: space-between; padding: 0.8rem 0; border-bottom: 1px solid #dee2e6; }
+        .total-row { display: flex; justify-content: space-between; padding: 1.5rem 0; font-size: 1.5rem; font-weight: bold; color: #28a745; }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333; }
+        .form-group input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; }
+        .btn-pay { background: linear-gradient(45deg, #28a745, #20c997); color: white; padding: 16px 40px; border: none; border-radius: 50px; font-size: 1.3rem; font-weight: bold; cursor: pointer; width: 100%; transition: all 0.3s; }
+        .btn-pay:hover { transform: scale(1.02); background: linear-gradient(45deg, #218838, #1ea085); }
+        .razorpay-logo { text-align: center; margin-top: 1rem; color: #888; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+    <div class="checkout-container">
+        <h1>💳 Checkout</h1>
+
+        <div class="order-summary">
+            <h3 style="color: #333; margin-bottom: 1rem;">Order Summary</h3>
+            {% for item in cart_items %}
+            <div class="item-row">
+                <span>{{ item.product.name }} × {{ item.qty }}</span>
+                <span>₹{{ item.subtotal|floatformat:0 }}</span>
+            </div>
+            {% endfor %}
+            <div class="total-row">
+                <span>Total</span>
+                <span>₹{{ total|floatformat:0 }}</span>
+            </div>
+        </div>
+
+        <form id="checkout-form">
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" id="name" placeholder="Your full name" required>
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="email" placeholder="your@email.com" required>
+            </div>
+            <div class="form-group">
+                <label>Phone</label>
+                <input type="tel" id="phone" placeholder="10-digit mobile number" required pattern="[0-9]{10}">
+            </div>
+            <div class="form-group">
+                <label>Delivery Address</label>
+                <input type="text" id="address" placeholder="Complete address in Vijayawada" required>
+            </div>
+
+            <button type="submit" class="btn-pay">Pay ₹{{ total|floatformat:0 }}</button>
+            <div class="razorpay-logo">Secured by Razorpay</div>
+        </form>
+    </div>
+
+    <script>
+document.getElementById('checkout-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    var options = {
+        "key": "rzp_test_1234567890",
+        "amount": {{ total_paise|safe }},
+        "currency": "INR",
+        "name": "Kirviko Aquarium",
+        "description": "Fish & Aquarium Supplies",
+        "image": "https://via.placeholder.com/150/007bff/ffffff?text=K",
+        "prefill": {
+            "name": document.getElementById('name').value,
+            "email": document.getElementById('email').value,
+            "contact": document.getElementById('phone').value
+        },
+        "theme": {
+            "color": "#007bff"
+        },
+        "handler": function (response) {
+            alert('Payment successful! ID: ' + response.razorpay_payment_id);
+            window.location.href = '/order-success/?payment_id=' + response.razorpay_payment_id;
+        }
+    };
+
+    var rzp = new Razorpay(options);
+    rzp.open();
+});
+</script>
+
+<footer style="background: rgba(0,0,0,0.8); color: white; padding: 2rem; text-align: center;">
+    <p>📍 Vijayawada, AP | 📧 contact@kirviko.in</p>
+    <p style="font-size: 0.8rem; margin-top: 1rem;">
+        AR Mini photo by [Forest & Kim Starr] on <a href="https://www.flickr.com/photo_download.gne?id=24318033423&secret=9a5a1fcf91&size=w&source=photoPageEngagement">Flickr</a> (CC BY 2.0)
+        Guppy Grass: Wikimedia Commons - <a href="https://commons.wikimedia.org/wiki/File:Hydrilla_verticillata_kz01_01.jpg" style="color: #fff;">Krzysztof Ziarnek, Kenraiz</a> (CC BY-SA 4.0)<br>
+        <br>Other images: Unsplash & Pexels (Free License)
+    </p>
+</footer
+
+
+</body>
+</html>

@@ -20,9 +20,19 @@ from django.urls import path
 from django.contrib import admin
 from django.urls import path, include
 from aquarium import views
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),  # ← Your aquarium home!
-]
+    path('cart/', views.cart, name='cart'),
+    path('add-to-cart/<int:product_id>/', views.add_to_cart, name='add_to_cart'),
+    path('checkout/', views.checkout, name='checkout'),
+    path('place-order/', views.place_order, name='place_order'),
+    path('order-success/', views.order_success, name='order_success'),
+    path('signup/', views.signup_view, name='signup'),
+    path('login/', views.login_view, name='login'),
+    path('logout/', views.logout_view, name='logout'),
+]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

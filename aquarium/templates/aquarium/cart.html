@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Checkout - Kirviko</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f8f9fa; margin: 0; padding: 2rem; }
+        .checkout-container { max-width: 800px; margin: 0 auto; background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+        h1 { color: #007bff; text-align: center; margin-bottom: 2rem; }
+        .order-summary { background: #f8f9fa; padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem; }
+        .item-row { display: flex; justify-content: space-between; padding: 0.8rem 0; border-bottom: 1px solid #dee2e6; }
+        .total-row { display: flex; justify-content: space-between; padding: 1.5rem 0; font-size: 1.5rem; font-weight: bold; color: #28a745; }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333; }
+        .form-group input, .form-group textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; }
+        .payment-method { background: #e7f3ff; padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem; }
+        .payment-method label { display: flex; align-items: center; padding: 1rem; margin: 0.5rem 0; background: white; border-radius: 8px; cursor: pointer; border: 2px solid transparent; }
+        .payment-method input[type="radio"] { margin-right: 1rem; width: 20px; height: 20px; }
+        .payment-method label:hover { border-color: #007bff; }
+        .btn-order { background: linear-gradient(45deg, #28a745, #20c997); color: white; padding: 16px 40px; border: none; border-radius: 50px; font-size: 1.3rem; font-weight: bold; cursor: pointer; width: 100%; transition: all 0.3s; }
+        .btn-order:hover { transform: scale(1.02); }
+    </style>
+</head>
+<body>
+    <div class="checkout-container">
+        <h1>🛒 Checkout</h1>
+
+        <div class="order-summary">
+            <h3 style="color: #333; margin-bottom: 1rem;">Order Summary</h3>
+            {% for item in cart_items %}
+            <div class="item-row">
+                <span>{{ item.product.name }} × {{ item.qty }}</span>
+                <span>₹{{ item.subtotal|floatformat:0 }}</span>
+            </div>
+            {% endfor %}
+            <div class="total-row">
+                <span>Total</span>
+                <span>₹{{ total|floatformat:0 }}</span>
+            </div>
+        </div>
+
+        <form method="POST" action="{% url 'place_order' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Name *</label>
+                <input type="text" name="name" placeholder="Your full name" required>
+            </div>
+            <div class="form-group">
+                <label>Phone (WhatsApp) *</label>
+                <input type="tel" name="phone" placeholder="10-digit mobile" required pattern="[0-9]{10}">
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" name="email" placeholder="your@email.com">
+            </div>
+            <div class="form-group">
+                <label>Delivery Address in Vijayawada *</label>
+                <textarea name="address" rows="3" placeholder="House/flat, street, landmark" required></textarea>
+            </div>
+
+            <div class="payment-method">
+                <h3 style="margin-bottom: 1rem;">Payment Method</h3>
+                <label>
+                    <input type="radio" name="payment" value="cod" checked>
+                    <span><strong>💵 Cash on Delivery</strong> - Pay when you receive</span>
+                </label>
+                <label>
+                    <input type="radio" name="payment" value="upi">
+                    <span><strong>📱 UPI / PhonePe / GPay</strong> - Pay via UPI after order confirm</span>
+                </label>
+            </div>
+
+            <button type="submit" class="btn-order">✅ Place Order (₹{{ total|floatformat:0 }})</button>
+        </form>
+
+        <p style="text-align: center; margin-top: 1.5rem; color: #6c757d;">
+            📍 Free delivery in Vijayawada | 📞 WhatsApp confirmation in 5 min
+        </p>
+    </div>
+<footer style="background: rgba(0,0,0,0.8); color: white; padding: 2rem; text-align: center;">
+    <p>📍 Vijayawada, AP | 📧 contact@kirviko.in</p>
+    <p style="font-size: 0.8rem; margin-top: 1rem;">
+        AR Mini photo by [Forest & Kim Starr] on <a href="https://www.flickr.com/photo_download.gne?id=24318033423&secret=9a5a1fcf91&size=w&source=photoPageEngagement">Flickr</a> (CC BY 2.0)
+        AR Mini: Wikimedia Commons - <a href="https://commons.wikimedia.org/wiki/File:Hydrilla_verticillata_kz01_01.jpg" style="color: #fff;">Krzysztof Ziarnek, Kenraiz</a> (CC BY-SA 4.0)<br>
+        <br>Other images: Unsplash & Pexels (Free License)
+    </p>
+</footer
+
+
+</body>
+</html>

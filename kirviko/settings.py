@@ -20,12 +20,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-local-testing-only-1234567890abcdefghijklmnopqrstuvwxyz')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False   # Production security
+DEBUG = True   # Production security
+STATICFILES_DIRS = [BASE_DIR / 'static']  # Development
+STATIC_ROOT = BASE_DIR / 'staticfiles'    # Production
 
-ALLOWED_HOSTS = ['kirviko-site.onrender.com','kirviko.in','www.kirviko.in']  # All domains (or kirviko.in later)
+#ALLOWED_HOSTS = ['localhost','kirviko-site.onrender.com','kirviko.in','www.kirviko.in']  # All domains (or kirviko.in later)
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
