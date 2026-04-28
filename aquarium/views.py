@@ -30,7 +30,6 @@ def add_to_cart(request, product_id):
     request.session['cart'] = cart
     request.session.modified = True
 
-    messages.success(request, 'Added to cart!')
     return redirect('home')
 
 
