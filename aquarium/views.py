@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Product
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
@@ -6,17 +6,18 @@ from django.contrib import messages
 
 
 def home(request):
-    """
-    Aquarium home page - shows products
-    """
     products = Product.objects.filter(stock__gt=0)
     for p in products:
-        p.rupee_price = int(p.price / 100)  # ₹ display
-    return render(request, 'aquarium/home.html', {'products': products})
+        p.rupee_price = int(p.price / 100)
 
+    # Total quantity across all cart items
+    cart = request.session.get('cart', {})
+    cart_count = sum(cart.values())
 
-from django.shortcuts import redirect
-from django.contrib import messages
+    return render(request, 'aquarium/home.html', {
+        'products': products,
+        'cart_count': cart_count,
+    })
 
 
 def add_to_cart(request, product_id):
@@ -27,6 +28,7 @@ def add_to_cart(request, product_id):
     cart = request.session.get('cart', {})
     cart[str(product_id)] = cart.get(str(product_id), 0) + 1
     request.session['cart'] = cart
+    request.session.modified = True
 
     messages.success(request, 'Added to cart!')
     return redirect('home')
@@ -40,14 +42,13 @@ def cart(request):
     cart_items = []
     total = 0
 
-    # Clean + process valid products ONLY
     valid_ids = []
     for pid_str in list(cart.keys()):
         try:
             pid = int(pid_str)
             product = Product.objects.get(id=pid)
             qty = cart[pid_str]
-            subtotal = (product.price * qty) / 100  # paise → rupees
+            subtotal = (product.price * qty) / 100
             total += subtotal
             cart_items.append({
                 'product': product,
@@ -56,10 +57,8 @@ def cart(request):
             })
             valid_ids.append(pid_str)
         except (ValueError, Product.DoesNotExist):
-            print(f"Removed invalid cart item: {pid_str}")  # Debug
-            del cart[pid_str]  # AUTO-DELETE BAD IDs
+            pass
 
-    # Save cleaned cart
     request.session['cart'] = {k: cart[k] for k in valid_ids}
     request.session.modified = True
 
@@ -90,13 +89,9 @@ def checkout(request):
     context = {
         'cart_items': cart_items,
         'total': total,
-        'total_paise': int(total * 100)  # For Razorpay
+        'total_paise': int(total * 100)
     }
     return render(request, 'aquarium/checkout.html', context)
-
-
-from django.shortcuts import redirect
-from django.contrib import messages
 
 
 def place_order(request):
@@ -123,16 +118,16 @@ def place_order(request):
         order_details += f"\n*Total: ₹{int(total)}*\n"
         order_details += f"*Payment: {payment.upper()}*"
 
-        # Save order to session for confirmation page
         request.session['last_order'] = {
             'name': name,
             'phone': phone,
             'total': int(total),
+            'payment': payment,
             'details': order_details
         }
 
-        # Clear cart
         request.session['cart'] = {}
+        request.session.modified = True
 
         return redirect('order_success')
 

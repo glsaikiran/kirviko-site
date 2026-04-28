@@ -372,7 +372,7 @@
         <li>
           <a href="{% url 'cart' %}" class="cart-pill">
             🛒 Cart
-            <span class="cart-count">{{ request.session.cart|length|default:0 }}</span>
+            <span class="cart-count">{{ cart_count }}</span>
           </a>
         </li>
       </ul>
