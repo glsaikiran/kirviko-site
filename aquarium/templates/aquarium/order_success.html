@@ -1,34 +1,172 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Order Confirmed!</title>
-    <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f8f9fa; padding: 2rem; text-align: center; }
-        .success-box { max-width: 600px; margin: 2rem auto; background: white; padding: 3rem; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
-        .success-icon { font-size: 5rem; margin-bottom: 1rem; }
-        h1 { color: #28a745; margin-bottom: 1rem; }
-        .order-id { background: #e7f3ff; padding: 1rem; border-radius: 8px; margin: 2rem 0; font-size: 1.2rem; }
-        .whatsapp-btn { background: #25D366; color: white; padding: 14px 30px; border-radius: 50px; text-decoration: none; display: inline-block; margin: 1rem; font-weight: bold; }
-        .home-btn { background: #007bff; color: white; padding: 14px 30px; border-radius: 50px; text-decoration: none; display: inline-block; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Confirmed – Kirviko Aquarium</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --teal: #0a7c6e;
+      --teal-light: #0fa58f;
+      --teal-pale: #e8f5f3;
+      --dark: #1a2526;
+      --mid: #4a5c5e;
+      --light: #f5f8f7;
+      --white: #ffffff;
+      --border: #dde8e6;
+      --font-head: 'Playfair Display', serif;
+      --font-body: 'DM Sans', sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--font-body);
+      background: var(--light);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    nav { background: white; border-bottom: 1px solid var(--border); }
+    .nav-inner { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; display: flex; align-items: center; height: 62px; }
+    .logo { font-family: var(--font-head); font-size: 1.4rem; color: var(--teal); text-decoration: none; }
+
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 1.5rem;
+    }
+    .success-card {
+      background: white;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      padding: 3rem 2.5rem;
+      max-width: 560px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 4px 24px rgba(10,124,110,0.08);
+    }
+    .success-icon {
+      width: 72px; height: 72px;
+      background: var(--teal-pale);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem;
+      margin: 0 auto 1.5rem;
+    }
+    h1 {
+      font-family: var(--font-head);
+      font-size: 1.8rem;
+      color: var(--dark);
+      margin-bottom: 0.75rem;
+    }
+    .subtitle { color: var(--mid); font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.5rem; }
+    .order-info {
+      background: var(--teal-pale);
+      border-radius: 10px;
+      padding: 1.2rem 1.5rem;
+      margin-bottom: 1.5rem;
+      text-align: left;
+    }
+    .order-info-row { display: flex; justify-content: space-between; padding: 0.4rem 0; font-size: 0.9rem; }
+    .order-info-row .label { color: var(--mid); }
+    .order-info-row .value { font-weight: 600; color: var(--dark); }
+    .notice {
+      background: #fff8f0;
+      border: 1px solid #f5d5b0;
+      border-radius: 8px;
+      padding: 0.9rem 1.2rem;
+      font-size: 0.85rem;
+      color: #7a4a10;
+      margin-bottom: 1.5rem;
+      text-align: left;
+      line-height: 1.5;
+    }
+    .action-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn-whatsapp {
+      background: #25D366;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.92rem;
+      transition: background 0.2s;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .btn-whatsapp:hover { background: #1ebe5d; }
+    .btn-home {
+      background: var(--teal);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.92rem;
+      transition: background 0.2s;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .btn-home:hover { background: var(--teal-light); }
+
+    footer { background: var(--dark); color: rgba(255,255,255,0.6); padding: 1.2rem; text-align: center; font-size: 0.8rem; }
+  </style>
 </head>
 <body>
-    <div class="success-box">
-        <div class="success-icon">✅</div>
-        <h1>Order Placed Successfully!</h1>
-        <p style="font-size: 1.2rem; color: #666;">Thank you {{ order.name }}! Your order worth <strong>₹{{ order.total }}</strong> is confirmed.</p>
 
-        <div class="order-id">
-            <strong>Order ID:</strong> KIR{{ order.phone|slice:"-4:" }}
-        </div>
-
-        <p>We'll contact you on <strong>{{ order.phone }}</strong> via WhatsApp within 5 minutes for delivery confirmation.</p>
-
-        <a href="https://wa.me/918332919049?text={{ order.details|urlencode }}" class="whatsapp-btn" target="_blank">
-            📱 Send Order via WhatsApp
-        </a>
-        <br>
-        <a href="{% url 'home' %}" class="home-btn">🏠 Back to Home</a>
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="logo">🐟 Kirviko Aquarium</a>
     </div>
+  </nav>
+
+  <main>
+    <div class="success-card">
+      <div class="success-icon">✅</div>
+      <h1>Order Confirmed!</h1>
+      <p class="subtitle">
+        Thank you, <strong>{{ order.name }}</strong>! Your order has been placed successfully.
+        We'll reach out on WhatsApp shortly.
+      </p>
+
+      <div class="order-info">
+        <div class="order-info-row">
+          <span class="label">Order ID</span>
+          <span class="value">KIR{{ order.phone|slice:"-4:" }}</span>
+        </div>
+        <div class="order-info-row">
+          <span class="label">Amount</span>
+          <span class="value">₹{{ order.total }}</span>
+        </div>
+        <div class="order-info-row">
+          <span class="label">Phone</span>
+          <span class="value">{{ order.phone }}</span>
+        </div>
+        <div class="order-info-row">
+          <span class="label">Payment</span>
+          <span class="value">{{ order.payment|upper }}</span>
+        </div>
+      </div>
+
+      <div class="notice">
+        📱 We'll send a WhatsApp confirmation to <strong>{{ order.phone }}</strong> within 5 minutes with delivery details.
+      </div>
+
+      <div class="action-buttons">
+        <a href="https://wa.me/918332919049?text={{ order.details|urlencode }}" class="btn-whatsapp" target="_blank">
+          📱 WhatsApp Us
+        </a>
+        <a href="{% url 'home' %}" class="btn-home">
+          🏠 Back to Home
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2025 Kirviko Aquarium, Vijayawada | contact@kirviko.in</p>
+  </footer>
+
 </body>
 </html>

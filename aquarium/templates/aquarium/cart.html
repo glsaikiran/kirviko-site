@@ -1,90 +1,205 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Checkout - Kirviko</title>
-    <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f8f9fa; margin: 0; padding: 2rem; }
-        .checkout-container { max-width: 800px; margin: 0 auto; background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
-        h1 { color: #007bff; text-align: center; margin-bottom: 2rem; }
-        .order-summary { background: #f8f9fa; padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem; }
-        .item-row { display: flex; justify-content: space-between; padding: 0.8rem 0; border-bottom: 1px solid #dee2e6; }
-        .total-row { display: flex; justify-content: space-between; padding: 1.5rem 0; font-size: 1.5rem; font-weight: bold; color: #28a745; }
-        .form-group { margin-bottom: 1.5rem; }
-        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333; }
-        .form-group input, .form-group textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; }
-        .payment-method { background: #e7f3ff; padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem; }
-        .payment-method label { display: flex; align-items: center; padding: 1rem; margin: 0.5rem 0; background: white; border-radius: 8px; cursor: pointer; border: 2px solid transparent; }
-        .payment-method input[type="radio"] { margin-right: 1rem; width: 20px; height: 20px; }
-        .payment-method label:hover { border-color: #007bff; }
-        .btn-order { background: linear-gradient(45deg, #28a745, #20c997); color: white; padding: 16px 40px; border: none; border-radius: 50px; font-size: 1.3rem; font-weight: bold; cursor: pointer; width: 100%; transition: all 0.3s; }
-        .btn-order:hover { transform: scale(1.02); }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout – Kirviko Aquarium</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --teal: #0a7c6e;
+      --teal-light: #0fa58f;
+      --teal-pale: #e8f5f3;
+      --dark: #1a2526;
+      --mid: #4a5c5e;
+      --light: #f5f8f7;
+      --white: #ffffff;
+      --border: #dde8e6;
+      --accent: #e07a2f;
+      --font-head: 'Playfair Display', serif;
+      --font-body: 'DM Sans', sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--light); color: var(--dark); }
+
+    /* NAV */
+    nav { background: white; border-bottom: 1px solid var(--border); }
+    .nav-inner {
+      max-width: 1100px; margin: 0 auto; padding: 0 1.5rem;
+      display: flex; align-items: center; justify-content: space-between; height: 62px;
+    }
+    .logo { font-family: var(--font-head); font-size: 1.4rem; color: var(--teal); text-decoration: none; }
+    .nav-back { font-size: 0.88rem; color: var(--mid); text-decoration: none; display: flex; align-items: center; gap: 4px; }
+    .nav-back:hover { color: var(--teal); }
+
+    /* LAYOUT */
+    .page { max-width: 1000px; margin: 2rem auto; padding: 0 1.5rem 4rem; display: grid; grid-template-columns: 1fr 380px; gap: 2rem; }
+
+    /* FORM SIDE */
+    .form-section {}
+    .form-section h1 { font-family: var(--font-head); font-size: 1.6rem; margin-bottom: 1.5rem; }
+    .card { background: white; border-radius: 12px; border: 1px solid var(--border); padding: 1.5rem; margin-bottom: 1.2rem; }
+    .card h3 { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--mid); margin-bottom: 1rem; }
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--dark); margin-bottom: 0.4rem; }
+    .form-group input, .form-group textarea {
+      width: 100%; padding: 11px 13px; border: 1.5px solid var(--border); border-radius: 8px;
+      font-size: 0.93rem; font-family: var(--font-body); color: var(--dark); outline: none; transition: border-color 0.2s;
+      resize: vertical;
+    }
+    .form-group input:focus, .form-group textarea:focus { border-color: var(--teal); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    /* PAYMENT OPTIONS */
+    .payment-option {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 12px; border-radius: 8px; border: 1.5px solid var(--border);
+      cursor: pointer; margin-bottom: 0.75rem; transition: border-color 0.2s, background 0.2s;
+    }
+    .payment-option:has(input:checked) { border-color: var(--teal); background: var(--teal-pale); }
+    .payment-option input[type="radio"] { margin-top: 2px; accent-color: var(--teal); }
+    .payment-option-label strong { font-size: 0.92rem; display: block; }
+    .payment-option-label span { font-size: 0.8rem; color: var(--mid); }
+
+    /* ORDER SUMMARY SIDE */
+    .summary-section {}
+    .summary-card { background: white; border-radius: 12px; border: 1px solid var(--border); padding: 1.5rem; position: sticky; top: 80px; }
+    .summary-card h2 { font-family: var(--font-head); font-size: 1.2rem; margin-bottom: 1.2rem; }
+    .item-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 0.7rem 0; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+    .item-row:last-of-type { border-bottom: none; }
+    .item-name { color: var(--dark); }
+    .item-qty { font-size: 0.78rem; color: var(--mid); margin-top: 2px; }
+    .item-price { font-weight: 600; color: var(--dark); white-space: nowrap; }
+    .total-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1rem 0 0; border-top: 2px solid var(--dark); margin-top: 0.5rem;
+      font-size: 1.1rem; font-weight: 700;
+    }
+    .total-amount { color: var(--teal); font-size: 1.25rem; }
+    .delivery-note {
+      background: var(--teal-pale); border-radius: 7px; padding: 10px 12px;
+      font-size: 0.82rem; color: var(--teal); margin-top: 1rem; line-height: 1.5;
+    }
+    .btn-order {
+      display: block; width: 100%; background: var(--teal); color: white;
+      border: none; padding: 14px; border-radius: 9px; font-size: 1rem;
+      font-weight: 700; font-family: var(--font-body); cursor: pointer;
+      text-align: center; margin-top: 1.2rem; transition: background 0.2s;
+    }
+    .btn-order:hover { background: var(--teal-light); }
+
+    footer { background: #1a2526; color: rgba(255,255,255,0.6); padding: 1.5rem; text-align: center; font-size: 0.82rem; }
+    footer a { color: rgba(255,255,255,0.5); text-decoration: none; }
+
+    @media (max-width: 768px) {
+      .page { grid-template-columns: 1fr; }
+      .summary-card { position: static; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
-    <div class="checkout-container">
-        <h1>🛒 Checkout</h1>
 
-        <div class="order-summary">
-            <h3 style="color: #333; margin-bottom: 1rem;">Order Summary</h3>
-            {% for item in cart_items %}
-            <div class="item-row">
-                <span>{{ item.product.name }} × {{ item.qty }}</span>
-                <span>₹{{ item.subtotal|floatformat:0 }}</span>
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="logo">🐟 Kirviko</a>
+      <a href="{% url 'cart' %}" class="nav-back">← Back to Cart</a>
+    </div>
+  </nav>
+
+  <div class="page">
+    <div class="form-section">
+      <h1>Checkout</h1>
+
+      <form method="POST" action="{% url 'place_order' %}">
+        {% csrf_token %}
+
+        <div class="card">
+          <h3>Delivery Details</h3>
+          <div class="form-group">
+            <label>Full Name *</label>
+            <input type="text" name="name" placeholder="Your full name" required>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Phone (WhatsApp) *</label>
+              <input type="tel" name="phone" placeholder="10-digit number" required pattern="[0-9]{10}">
             </div>
-            {% endfor %}
-            <div class="total-row">
-                <span>Total</span>
-                <span>₹{{ total|floatformat:0 }}</span>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" name="email" placeholder="your@email.com">
             </div>
+          </div>
+          <div class="form-group">
+            <label>Delivery Address in Vijayawada *</label>
+            <textarea name="address" rows="3" placeholder="House/flat number, street, area, landmark" required></textarea>
+          </div>
         </div>
 
-        <form method="POST" action="{% url 'place_order' %}">
-            {% csrf_token %}
-            <div class="form-group">
-                <label>Name *</label>
-                <input type="text" name="name" placeholder="Your full name" required>
+        <div class="card">
+          <h3>Payment Method</h3>
+          <label class="payment-option">
+            <input type="radio" name="payment" value="cod" checked>
+            <div class="payment-option-label">
+              <strong>💵 Cash on Delivery</strong>
+              <span>Pay in cash when you receive your order</span>
             </div>
-            <div class="form-group">
-                <label>Phone (WhatsApp) *</label>
-                <input type="tel" name="phone" placeholder="10-digit mobile" required pattern="[0-9]{10}">
+          </label>
+          <label class="payment-option">
+            <input type="radio" name="payment" value="upi">
+            <div class="payment-option-label">
+              <strong>📱 UPI / PhonePe / GPay</strong>
+              <span>We'll share our UPI ID after confirming your order</span>
             </div>
-            <div class="form-group">
-                <label>Email</label>
-                <input type="email" name="email" placeholder="your@email.com">
-            </div>
-            <div class="form-group">
-                <label>Delivery Address in Vijayawada *</label>
-                <textarea name="address" rows="3" placeholder="House/flat, street, landmark" required></textarea>
-            </div>
+          </label>
+        </div>
 
-            <div class="payment-method">
-                <h3 style="margin-bottom: 1rem;">Payment Method</h3>
-                <label>
-                    <input type="radio" name="payment" value="cod" checked>
-                    <span><strong>💵 Cash on Delivery</strong> - Pay when you receive</span>
-                </label>
-                <label>
-                    <input type="radio" name="payment" value="upi">
-                    <span><strong>📱 UPI / PhonePe / GPay</strong> - Pay via UPI after order confirm</span>
-                </label>
-            </div>
-
-            <button type="submit" class="btn-order">✅ Place Order (₹{{ total|floatformat:0 }})</button>
-        </form>
-
-        <p style="text-align: center; margin-top: 1.5rem; color: #6c757d;">
-            📍 Free delivery in Vijayawada | 📞 WhatsApp confirmation in 5 min
-        </p>
+        <!-- Submit button also in summary on desktop, here for mobile -->
+        <button type="submit" class="btn-order" style="display:none;" id="mobileSubmit">
+          ✅ Place Order — ₹{{ total|floatformat:0 }}
+        </button>
+      </form>
     </div>
-<footer style="background: rgba(0,0,0,0.8); color: white; padding: 2rem; text-align: center;">
+
+    <div class="summary-section">
+      <div class="summary-card">
+        <h2>Order Summary</h2>
+        {% for item in cart_items %}
+        <div class="item-row">
+          <div>
+            <div class="item-name">{{ item.product.name }}</div>
+            <div class="item-qty">Qty: {{ item.qty }}</div>
+          </div>
+          <div class="item-price">₹{{ item.subtotal|floatformat:0 }}</div>
+        </div>
+        {% endfor %}
+        <div class="total-row">
+          <span>Total</span>
+          <span class="total-amount">₹{{ total|floatformat:0 }}</span>
+        </div>
+        <div class="delivery-note">🚚 Free delivery within Vijayawada city. WhatsApp confirmation within 5 minutes.</div>
+        <button type="submit" form="checkout-form" class="btn-order" onclick="document.querySelector('form').submit()">
+          ✅ Place Order — ₹{{ total|floatformat:0 }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
     <p>📍 Vijayawada, AP | 📧 contact@kirviko.in</p>
-    <p style="font-size: 0.8rem; margin-top: 1rem;">
-        AR Mini photo by [Forest & Kim Starr] on <a href="https://www.flickr.com/photo_download.gne?id=24318033423&secret=9a5a1fcf91&size=w&source=photoPageEngagement">Flickr</a> (CC BY 2.0)
-        AR Mini: Wikimedia Commons - <a href="https://commons.wikimedia.org/wiki/File:Hydrilla_verticillata_kz01_01.jpg" style="color: #fff;">Krzysztof Ziarnek, Kenraiz</a> (CC BY-SA 4.0)<br>
-        <br>Other images: Unsplash & Pexels (Free License)
+    <p style="margin-top:0.5rem;">
+      Images: <a href="#">Unsplash & Pexels</a> (Free License) |
+      AR Mini: <a href="https://www.flickr.com/photo_download.gne?id=24318033423&secret=9a5a1fcf91&size=w&source=photoPageEngagement">Forest & Kim Starr</a> (CC BY 2.0) |
+      Hydrilla: <a href="https://commons.wikimedia.org/wiki/File:Hydrilla_verticillata_kz01_01.jpg">Krzysztof Ziarnek</a> (CC BY-SA 4.0)
     </p>
-</footer
+  </footer>
 
-
+  <script>
+    // Show mobile submit button on small screens
+    if (window.innerWidth <= 768) {
+      document.getElementById('mobileSubmit').style.display = 'block';
+    }
+  </script>
 </body>
 </html>

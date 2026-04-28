@@ -1,103 +1,169 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Checkout - Kirviko</title>
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-    <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f8f9fa; margin: 0; padding: 2rem; }
-        .checkout-container { max-width: 800px; margin: 0 auto; background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
-        h1 { color: #007bff; text-align: center; margin-bottom: 2rem; }
-        .order-summary { background: #f8f9fa; padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem; }
-        .item-row { display: flex; justify-content: space-between; padding: 0.8rem 0; border-bottom: 1px solid #dee2e6; }
-        .total-row { display: flex; justify-content: space-between; padding: 1.5rem 0; font-size: 1.5rem; font-weight: bold; color: #28a745; }
-        .form-group { margin-bottom: 1.5rem; }
-        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333; }
-        .form-group input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; }
-        .btn-pay { background: linear-gradient(45deg, #28a745, #20c997); color: white; padding: 16px 40px; border: none; border-radius: 50px; font-size: 1.3rem; font-weight: bold; cursor: pointer; width: 100%; transition: all 0.3s; }
-        .btn-pay:hover { transform: scale(1.02); background: linear-gradient(45deg, #218838, #1ea085); }
-        .razorpay-logo { text-align: center; margin-top: 1rem; color: #888; font-size: 0.9rem; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout – Kirviko Aquarium</title>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --teal: #0a7c6e;
+      --teal-light: #0fa58f;
+      --teal-pale: #e8f5f3;
+      --dark: #1a2526;
+      --mid: #4a5c5e;
+      --light: #f5f8f7;
+      --white: #ffffff;
+      --border: #dde8e6;
+      --font-head: 'Playfair Display', serif;
+      --font-body: 'DM Sans', sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--light); color: var(--dark); }
+    nav { background: white; border-bottom: 1px solid var(--border); }
+    .nav-inner { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between; height: 62px; }
+    .logo { font-family: var(--font-head); font-size: 1.4rem; color: var(--teal); text-decoration: none; }
+    .nav-back { font-size: 0.88rem; color: var(--mid); text-decoration: none; }
+    .nav-back:hover { color: var(--teal); }
+
+    .page { max-width: 1000px; margin: 2rem auto; padding: 0 1.5rem 4rem; display: grid; grid-template-columns: 1fr 380px; gap: 2rem; }
+    .form-section h1 { font-family: var(--font-head); font-size: 1.6rem; margin-bottom: 1.5rem; }
+    .card { background: white; border-radius: 12px; border: 1px solid var(--border); padding: 1.5rem; margin-bottom: 1.2rem; }
+    .card h3 { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--mid); margin-bottom: 1rem; }
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--dark); margin-bottom: 0.4rem; }
+    .form-group input {
+      width: 100%; padding: 11px 13px; border: 1.5px solid var(--border); border-radius: 8px;
+      font-size: 0.93rem; font-family: var(--font-body); color: var(--dark); outline: none; transition: border-color 0.2s;
+    }
+    .form-group input:focus { border-color: var(--teal); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    .summary-card { background: white; border-radius: 12px; border: 1px solid var(--border); padding: 1.5rem; position: sticky; top: 80px; }
+    .summary-card h2 { font-family: var(--font-head); font-size: 1.2rem; margin-bottom: 1.2rem; }
+    .item-row { display: flex; justify-content: space-between; padding: 0.7rem 0; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+    .item-name { color: var(--dark); }
+    .item-qty { font-size: 0.78rem; color: var(--mid); margin-top: 2px; }
+    .item-price { font-weight: 600; }
+    .total-row { display: flex; justify-content: space-between; padding: 1rem 0 0; border-top: 2px solid var(--dark); margin-top: 0.5rem; font-size: 1.1rem; font-weight: 700; }
+    .total-amount { color: var(--teal); font-size: 1.25rem; }
+    .btn-pay {
+      display: block; width: 100%; background: var(--teal); color: white;
+      border: none; padding: 14px; border-radius: 9px; font-size: 1rem;
+      font-weight: 700; font-family: var(--font-body); cursor: pointer;
+      margin-top: 1.2rem; transition: background 0.2s;
+    }
+    .btn-pay:hover { background: var(--teal-light); }
+    .secure-note { text-align: center; font-size: 0.78rem; color: var(--mid); margin-top: 0.75rem; }
+
+    footer { background: #1a2526; color: rgba(255,255,255,0.6); padding: 1.5rem; text-align: center; font-size: 0.82rem; }
+    footer a { color: rgba(255,255,255,0.5); text-decoration: none; }
+
+    @media (max-width: 768px) {
+      .page { grid-template-columns: 1fr; }
+      .summary-card { position: static; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
-    <div class="checkout-container">
-        <h1>💳 Checkout</h1>
 
-        <div class="order-summary">
-            <h3 style="color: #333; margin-bottom: 1rem;">Order Summary</h3>
-            {% for item in cart_items %}
-            <div class="item-row">
-                <span>{{ item.product.name }} × {{ item.qty }}</span>
-                <span>₹{{ item.subtotal|floatformat:0 }}</span>
-            </div>
-            {% endfor %}
-            <div class="total-row">
-                <span>Total</span>
-                <span>₹{{ total|floatformat:0 }}</span>
-            </div>
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="logo">🐟 Kirviko</a>
+      <a href="/" class="nav-back">← Continue Shopping</a>
+    </div>
+  </nav>
+
+  <div class="page">
+    <div class="form-section">
+      <h1>Checkout</h1>
+      <div class="card">
+        <h3>Your Details</h3>
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="name" placeholder="Your full name" required>
         </div>
-
-        <form id="checkout-form">
-            <div class="form-group">
-                <label>Name</label>
-                <input type="text" id="name" placeholder="Your full name" required>
-            </div>
-            <div class="form-group">
-                <label>Email</label>
-                <input type="email" id="email" placeholder="your@email.com" required>
-            </div>
-            <div class="form-group">
-                <label>Phone</label>
-                <input type="tel" id="phone" placeholder="10-digit mobile number" required pattern="[0-9]{10}">
-            </div>
-            <div class="form-group">
-                <label>Delivery Address</label>
-                <input type="text" id="address" placeholder="Complete address in Vijayawada" required>
-            </div>
-
-            <button type="submit" class="btn-pay">Pay ₹{{ total|floatformat:0 }}</button>
-            <div class="razorpay-logo">Secured by Razorpay</div>
-        </form>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="email" placeholder="your@email.com" required>
+          </div>
+          <div class="form-group">
+            <label>Phone</label>
+            <input type="tel" id="phone" placeholder="10-digit number" required pattern="[0-9]{10}">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Delivery Address (Vijayawada)</label>
+          <input type="text" id="address" placeholder="House, street, area, landmark" required>
+        </div>
+      </div>
     </div>
 
-    <script>
-document.getElementById('checkout-form').addEventListener('submit', function(e) {
-    e.preventDefault();
+    <div class="summary-section">
+      <div class="summary-card">
+        <h2>Order Summary</h2>
+        {% for item in cart_items %}
+        <div class="item-row">
+          <div>
+            <div class="item-name">{{ item.product.name }}</div>
+            <div class="item-qty">Qty: {{ item.qty }}</div>
+          </div>
+          <div class="item-price">₹{{ item.subtotal|floatformat:0 }}</div>
+        </div>
+        {% endfor %}
+        <div class="total-row">
+          <span>Total</span>
+          <span class="total-amount">₹{{ total|floatformat:0 }}</span>
+        </div>
+        <button class="btn-pay" id="payBtn">Pay ₹{{ total|floatformat:0 }}</button>
+        <div class="secure-note">🔒 Secured by Razorpay</div>
+      </div>
+    </div>
+  </div>
 
-    var options = {
+  <footer>
+    <p>📍 Vijayawada, AP | 📧 contact@kirviko.in</p>
+    <p style="margin-top:0.5rem;">
+      AR Mini: <a href="https://www.flickr.com/photo_download.gne?id=24318033423&secret=9a5a1fcf91&size=w&source=photoPageEngagement">Forest & Kim Starr</a> (CC BY 2.0) |
+      Hydrilla: <a href="https://commons.wikimedia.org/wiki/File:Hydrilla_verticillata_kz01_01.jpg">Krzysztof Ziarnek</a> (CC BY-SA 4.0) |
+      Other images: Unsplash & Pexels (Free License)
+    </p>
+  </footer>
+
+  <script>
+    document.getElementById('payBtn').addEventListener('click', function() {
+      var name = document.getElementById('name').value.trim();
+      var email = document.getElementById('email').value.trim();
+      var phone = document.getElementById('phone').value.trim();
+      var address = document.getElementById('address').value.trim();
+
+      if (!name || !email || !phone || !address) {
+        alert('Please fill in all required fields.');
+        return;
+      }
+      if (!/^[0-9]{10}$/.test(phone)) {
+        alert('Please enter a valid 10-digit phone number.');
+        return;
+      }
+
+      var options = {
         "key": "rzp_test_1234567890",
         "amount": {{ total_paise|safe }},
         "currency": "INR",
         "name": "Kirviko Aquarium",
         "description": "Fish & Aquarium Supplies",
-        "image": "https://via.placeholder.com/150/007bff/ffffff?text=K",
-        "prefill": {
-            "name": document.getElementById('name').value,
-            "email": document.getElementById('email').value,
-            "contact": document.getElementById('phone').value
-        },
-        "theme": {
-            "color": "#007bff"
-        },
-        "handler": function (response) {
-            alert('Payment successful! ID: ' + response.razorpay_payment_id);
-            window.location.href = '/order-success/?payment_id=' + response.razorpay_payment_id;
+        "prefill": { "name": name, "email": email, "contact": phone },
+        "theme": { "color": "#0a7c6e" },
+        "handler": function(response) {
+          window.location.href = '/order-success/?payment_id=' + response.razorpay_payment_id;
         }
-    };
-
-    var rzp = new Razorpay(options);
-    rzp.open();
-});
-</script>
-
-<footer style="background: rgba(0,0,0,0.8); color: white; padding: 2rem; text-align: center;">
-    <p>📍 Vijayawada, AP | 📧 contact@kirviko.in</p>
-    <p style="font-size: 0.8rem; margin-top: 1rem;">
-        AR Mini photo by [Forest & Kim Starr] on <a href="https://www.flickr.com/photo_download.gne?id=24318033423&secret=9a5a1fcf91&size=w&source=photoPageEngagement">Flickr</a> (CC BY 2.0)
-        Guppy Grass: Wikimedia Commons - <a href="https://commons.wikimedia.org/wiki/File:Hydrilla_verticillata_kz01_01.jpg" style="color: #fff;">Krzysztof Ziarnek, Kenraiz</a> (CC BY-SA 4.0)<br>
-        <br>Other images: Unsplash & Pexels (Free License)
-    </p>
-</footer
-
-
+      };
+      new Razorpay(options).open();
+    });
+  </script>
 </body>
 </html>

@@ -1,37 +1,33 @@
-/* Kirviko Aquarium Styles */
+/* Kirviko Aquarium – Global Styles
+   Shared base; page-specific styles are in each template's <style> block */
+
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Segoe UI', sans-serif; background: #f8f9fa; color: #333; }
 
-header { background: linear-gradient(135deg, #007bff, #0056b3); color: white; text-align: center; padding: 2rem; }
-header h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
-header p { font-size: 1.2rem; opacity: 0.9; }
-
-.products {
-  display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem;
-  max-width: 1200px; margin: 2rem auto; padding: 0 1rem;
+:root {
+  --teal: #0a7c6e;
+  --teal-light: #0fa58f;
+  --teal-pale: #e8f5f3;
+  --dark: #1a2526;
+  --mid: #4a5c5e;
+  --light: #f5f8f7;
+  --white: #ffffff;
+  --border: #dde8e6;
+  --accent: #e07a2f;
+  --font-head: 'Playfair Display', serif;
+  --font-body: 'DM Sans', sans-serif;
 }
 
-.product-card {
-  background: white; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-  width: 280px; padding: 1.5rem; text-align: center; transition: transform 0.3s;
+body {
+  font-family: var(--font-body);
+  background: var(--light);
+  color: var(--dark);
 }
-.product-card:hover { transform: translateY(-5px); }
 
-.product-card h3 { color: #007bff; margin-bottom: 1rem; font-size: 1.4rem; }
-.price { font-size: 1.8rem; color: #28a745; font-weight: bold; margin-bottom: 1rem; }
+img { display: block; max-width: 100%; }
 
-.btn-add {
-  background: linear-gradient(45deg, #28a745, #20c997); color: white;
-  padding: 14px 30px; border: none; border-radius: 50px; font-size: 1.1rem;
-  font-weight: bold; cursor: pointer; text-decoration: none; display: block;
-  transition: all 0.3s;
-}
-.btn-add:hover { background: linear-gradient(45deg, #218838, #1ea085); transform: scale(1.05); }
+a { color: var(--teal); }
 
-.cart-link {
-  display: block; margin: 2rem auto; text-align: center; color: #007bff;
-  font-size: 1.2rem; text-decoration: none; font-weight: bold;
-}
-.cart-link:hover { color: #0056b3; }
-
-footer { background: #343a40; color: white; text-align: center; padding: 1.5rem; margin-top: 3rem; }
+/* Utility */
+.text-center { text-align: center; }
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
